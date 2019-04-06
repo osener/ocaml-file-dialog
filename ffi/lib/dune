@@ -1,0 +1,27 @@
+(rule
+ (targets g.ml)
+ (deps
+  (:stubgen ../stubgen/ffi_stubgen.exe))
+ (action
+  (with-stdout-to
+   %{targets}
+   (run %{stubgen} -ml))))
+
+(rule
+ (targets nfd_stubs.c)
+ (deps
+  (:stubgen ../stubgen/ffi_stubgen.exe))
+ (action
+  (with-stdout-to
+   %{targets}
+   (run %{stubgen} -c))))
+
+(library
+ (name nfd_ffi)
+ (public_name file_dialog.ffi)
+ (modules g m)
+ (c_names nfd_stubs)
+ (flags
+  (:standard -w -9-27-32-34))
+ (c_flags :standard -I../../nfd_c/nfd/src/include)
+ (libraries ctypes ctypes.stubs nfd_bindings nfd_types integers))

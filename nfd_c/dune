@@ -1,0 +1,73 @@
+(* -*- tuareg -*- *)
+
+let host =
+  let system () = Jbuild_plugin.V1.ocamlc_config |> List.assoc "system" in
+  let use_gtk () =
+    match Sys.getenv "OCAML_FILE_DIALOG_USE_GTK" with
+    | exception Not_found -> false
+    | _ -> true
+  in
+  match system () with
+  | "linux" -> if use_gtk () then "linux" else "linux_zenity"
+  | "mingw64" | "cygwin" -> "windows"
+  | s -> s
+
+
+let rule =
+  Format.sprintf
+    {|
+(rule
+ (deps
+  (source_tree nfd))
+ (targets libnfd_stubs.a dllnfd_stubs.so)
+ (action
+  (bash "\
+\n make -C nfd/build/gmake_%s nfd
+\n cp nfd/build/lib/Release/x64/libnfd.a libnfd_stubs.a
+\n touch dllnfd_stubs.so
+\n")
+  ))
+|}
+    host
+
+
+let flags =
+  match host with
+  | "linux" ->
+    {|
+ (c_flags         (:include c_flags.sexp))
+ (c_library_flags (:include c_library_flags.sexp))
+|}
+  | "macosx" -> {|
+  (flags :standard -ccopt "-framework AppKit")
+|}
+  | "windows" -> {|
+     (flags :standard -cclib comctl32.lib)
+|}
+  | _ -> ""
+
+
+let () =
+  Printf.ksprintf
+    Jbuild_plugin.V1.send
+    {|
+%s
+(executable
+ (name discover)
+ (libraries dune.configurator))
+
+(rule
+ (targets c_flags.sexp c_library_flags.sexp)
+ (deps    (:discover discover.exe))
+ (action  (run %%{discover})))
+
+(library
+ (name nfd_c)
+ (public_name file_dialog.c)
+ (modules)
+ (libraries ctypes)
+ %s
+ (self_build_stubs_archive (nfd)))
+|}
+    rule
+    flags

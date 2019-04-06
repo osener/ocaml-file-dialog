@@ -1,0 +1,4 @@
+(library
+ (name file_dialog)
+ (public_name file_dialog)
+ (libraries ctypes file_dialog.c nfd_ffi nfd_types nfd_bindings fpath result))

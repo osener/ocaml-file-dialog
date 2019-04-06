@@ -1,0 +1,24 @@
+opam-version: "2.0"
+maintainer: "Ozan Sener <ozan@ozansener.com>"
+authors: [ "Ozan Sener" ]
+homepage: "https://github.com/osener/ocaml-file-dialog"
+bug-reports: "https://github.com/osener/ocaml-file-dialog/issues"
+dev-repo: "git+https://github.com/osener/ocaml-file-dialog.git"
+license: "zlib"
+build: [
+  ["dune" "build" "-p" name "-j" jobs]
+]
+depends: [
+  "ctypes" {>= "0.14.0"}
+  "dune" {build & >= "1.1.0"}
+  "fpath"
+  "result"
+  "ocaml" {>= "4.02"}
+]
+synopsis: "OCaml bindings for nativefiledialog"
+description: "
+"
+depexts: [
+ [ ["fedora"] ["gcc-c++"] ]
+ [ ["oraclelinux"] ["gcc-c++"] ]
+]

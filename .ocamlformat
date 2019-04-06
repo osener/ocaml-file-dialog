@@ -1,0 +1,4 @@
+profile = janestreet
+let-binding-spacing = sparse
+parse-docstrings = true
+wrap-comments = true

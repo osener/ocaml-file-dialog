@@ -1,0 +1,4 @@
+(library
+ (name nfd_bindings_types)
+ (public_name file_dialog.bindings_types)
+ (libraries ctypes.stubs ctypes.foreign ctypes))

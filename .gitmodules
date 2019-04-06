@@ -1,0 +1,3 @@
+[submodule "nativefiledialog"]
+	path = nfd_c/nfd
+	url = https://github.com/mlabbe/nativefiledialog.git

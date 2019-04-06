@@ -1,0 +1,5 @@
+(library
+ (name nfd_bindings)
+ (public_name file_dialog.bindings)
+ (synopsis "Ctypes bindings that describe the libnfd FFI")
+ (libraries nfd_types ctypes.stubs ctypes))

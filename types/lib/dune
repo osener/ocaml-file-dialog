@@ -1,0 +1,15 @@
+(rule
+ (targets g.ml)
+ (deps ../stubgen/ffi_ml_types_stubgen.exe)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run %{deps}))))
+
+(library
+ (name nfd_types)
+ (public_name file_dialog.types)
+ (synopsis "Ctypes bindings that describe the libnfd FFI constants")
+ (flags
+  (:standard -w -9-27-32-34))
+ (libraries ctypes ctypes.stubs nfd_bindings_types integers))
